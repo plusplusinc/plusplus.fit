@@ -1,6 +1,6 @@
 # plusplus.fit
 
-The public site for [PlusPlus (++)](https://github.com/mrdavidjcole/plusplus) — marketing landing page and developer-platform docs.
+The public site for [PlusPlus (++)](https://github.com/plusplusinc/plusplus) — marketing landing page and developer-platform docs.
 
 Hand-rolled static HTML/CSS in the app's quiet-terminal design language (v3 "ink × increment green" palette, dark default, light via `prefers-color-scheme`). No build step, no dependencies.
 
@@ -20,7 +20,7 @@ Pushes to `main` deploy automatically once GitHub Pages is set to "GitHub Action
 
 The site deploys on Vercel as a plain static project (`vercel.json` handles clean URLs and the AASA content type). One-time setup, done from the Vercel dashboard by the account owner:
 
-1. **Add New → Project → Import `mrdavidjcole/plusplus.fit`** (framework preset: **Other**, no build command, output directory: root).
+1. **Add New → Project → Import `plusplusinc/plusplus.fit`** (framework preset: **Other**, no build command, output directory: root).
 2. **Settings → Domains → add `plusplus.fit`** (the domain already lives in this Vercel account, so it attaches without DNS changes).
 3. Every push to `main` deploys; PRs get preview URLs automatically.
 
