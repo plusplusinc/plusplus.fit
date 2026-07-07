@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Shared routine — PlusPlus (++)</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='72' font-family='monospace' font-weight='bold' fill='%2346d17c'>+</text></svg>">
+  <style>
+    .routine-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-top: 20px; }
+    .routine-card h1 { font-size: 26px; margin: 0; }
+    .meta { font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; color: var(--text-2); margin-top: 4px; }
+    .group { border-top: 1px solid var(--border); margin-top: 14px; padding-top: 12px; }
+    .group:first-of-type { border-top: 0; margin-top: 6px; }
+    .group .glabel { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 11px; letter-spacing: .07em; color: var(--text-2); }
+    .exercise { display: flex; justify-content: space-between; gap: 12px; padding: 7px 0; }
+    .exercise .name { font-weight: 600; }
+    .exercise .target { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 14px; color: var(--text-2); white-space: nowrap; }
+    .equip { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12px; color: var(--text-3); }
+    .superset-tag { color: var(--info); font-family: ui-monospace, Menlo, monospace; font-size: 11px; letter-spacing: .07em; }
+    .open-cta { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; }
+    .error { border: 1px dashed var(--border-strong); border-radius: 14px; padding: 24px; margin-top: 24px; color: var(--text-2); }
+    .notesline { font-size: 14px; color: var(--text-2); margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <header class="site">
+    <a class="mark" href="/">++</a>
+    <nav>
+      <a href="/docs/">docs</a>
+      <a href="https://github.com/mrdavidjcole/plusplus">github</a>
+    </nav>
+  </header>
+
+  <main>
+    <p class="caption" style="margin-top:26px" id="shared-label">someone shared a routine with you</p>
+    <div id="viewer"></div>
+    <div class="open-cta" id="cta" hidden>
+      <a class="btn primary" id="open-app" href="#">Open in PlusPlus</a>
+      <a class="btn ghost" href="/">Get PlusPlus — beta on TestFlight</a>
+      <p class="caption">the routine travels inside this link — nothing was uploaded anywhere</p>
+    </div>
+  </main>
+
+  <footer>
+    <span>++ · plusplus.fit</span>
+    <span><a href="/privacy/">privacy</a> · <a href="/docs/">docs</a></span>
+  </footer>
+
+  <script>
+  (function () {
+    const viewer = document.getElementById('viewer');
+
+    function fail(message) {
+      viewer.innerHTML = '<div class="error"><strong>Couldn’t read this routine link.</strong><br>' + message + '</div>';
+    }
+
+    function esc(s) {
+      const d = document.createElement('div');
+      d.textContent = String(s);
+      return d.innerHTML;
+    }
+
+    function targetText(entry, sets, isDuration) {
+      if (isDuration) {
+        const s = entry.durationSeconds || 0;
+        const t = s >= 60 ? Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0') : s + ' sec';
+        return sets + '× ' + t;
+      }
+      let reps = entry.reps == null ? '?' : String(entry.reps);
+      if (entry.repsUpper != null && entry.repsUpper !== entry.reps) reps += '–' + entry.repsUpper;
+      let text = sets + '×' + reps;
+      if (entry.weight != null && entry.weight > 0) {
+        text += ' @ ' + (Number.isInteger(entry.weight) ? entry.weight : entry.weight.toFixed(1));
+      }
+      return text;
+    }
+
+    const hash = location.hash.replace(/^#/, '');
+    if (!hash) { fail('The link is missing its payload fragment.'); return; }
+    if (hash[0] !== '0') { fail('This link needs a newer viewer — try updating the app that made it.'); return; }
+
+    let doc;
+    try {
+      const b64 = hash.slice(1).replace(/-/g, '+').replace(/_/g, '/');
+      const json = decodeURIComponent(Array.prototype.map.call(atob(b64), function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      }).join(''));
+      doc = JSON.parse(json);
+    } catch (e) {
+      fail('The payload didn’t decode — the link may have been truncated by wherever it was pasted.');
+      return;
+    }
+
+    if (!doc || doc.share !== 1 || !doc.routine || !Array.isArray(doc.routine.groups)) {
+      fail('The payload decoded but isn’t a PlusPlus routine.');
+      return;
+    }
+
+    const routine = doc.routine;
+    const types = {};
+    (doc.exercises || []).forEach(function (e) { types[e.name] = e; });
+
+    const exerciseCount = routine.groups.reduce(function (n, g) { return n + (g.exercises || []).length; }, 0);
+    const unit = doc.units === 'kg' ? 'kg' : 'lb';
+    const equipment = Array.from(new Set((doc.exercises || []).flatMap(function (e) { return e.equipment || []; }))).sort();
+
+    let html = '<div class="routine-card">';
+    html += '<h1>' + esc(routine.name || 'Routine') + '</h1>';
+    html += '<div class="meta">' + exerciseCount + ' exercise' + (exerciseCount === 1 ? '' : 's') +
+            ' · rest ' + (routine.restSeconds || 90) + 's' +
+            (equipment.length ? ' · ' + esc(equipment.join(', ').toLowerCase()) : ' · bodyweight') + '</div>';
+    if (routine.notes) html += '<p class="notesline">' + esc(routine.notes) + '</p>';
+
+    routine.groups.forEach(function (group) {
+      const isSuperset = (group.exercises || []).length > 1;
+      html += '<div class="group">';
+      html += '<div class="glabel">' + group.sets + ' SET' + (group.sets === 1 ? '' : 'S') +
+              (isSuperset ? ' · <span class="superset-tag">SUPERSET</span>' : '') + '</div>';
+      (group.exercises || []).forEach(function (entry) {
+        const def = types[entry.exercise] || {};
+        const isDuration = def.exerciseType === 'duration';
+        html += '<div class="exercise"><div><div class="name">' + esc(entry.exercise) + '</div>';
+        if (def.equipment && def.equipment.length) {
+          html += '<div class="equip">' + esc(def.equipment.join(', ').toLowerCase()) + '</div>';
+        }
+        html += '</div><div class="target">' + esc(targetText(entry, group.sets, isDuration)) +
+                (isDuration || entry.weight == null || entry.weight <= 0 ? '' : ' ' + unit) + '</div></div>';
+      });
+      html += '</div>';
+    });
+    html += '</div>';
+
+    viewer.innerHTML = html;
+    document.title = esc(routine.name || 'Routine') + ' — PlusPlus (++)';
+    const cta = document.getElementById('cta');
+    cta.hidden = false;
+    document.getElementById('open-app').href = 'plusplus://r#' + hash;
+  })();
+  </script>
+</body>
+</html>

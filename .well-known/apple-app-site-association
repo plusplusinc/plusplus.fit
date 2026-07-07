@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["TEAMID.com.davidcole.plusplus"],
+        "components": [
+          { "/": "/r", "comment": "Shared routine links open in the app when installed" },
+          { "/": "/r/*" }
+        ]
+      }
+    ]
+  }
+}
