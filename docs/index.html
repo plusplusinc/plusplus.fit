@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PlusPlus docs — the developer platform</title>
+  <meta name="description" content="The PlusPlus developer platform: the interchange format, the repo-as-backend sync model, the CLI, and the MCP server for agents.">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='72' font-family='monospace' font-weight='bold' fill='%2346d17c'>+</text></svg>">
+</head>
+<body>
+  <header class="site">
+    <a class="mark" href="/">++</a>
+    <nav>
+      <a href="/docs/">docs</a>
+      <a href="https://github.com/mrdavidjcole/plusplus">github</a>
+    </nav>
+  </header>
+
+  <main>
+    <article class="doc">
+      <h1>The developer platform</h1>
+      <p class="caption">format-as-contract · repo-as-backend · no server</p>
+
+      <h2>THE FORMAT</h2>
+      <p>Everything PlusPlus knows — exercises, workouts, finished sessions — serializes to <strong>versioned, deterministic JSON</strong> (schema v1). Deterministic means byte-stable: the same data always encodes to the same bytes, so diffs are clean and merges are sane. The format is the contract shared by the app's export/import, the sync engine, the CLI, and anything you build.</p>
+      <p>Conformance fixtures live in the repo as the language-neutral spec — a port that round-trips the fixtures is a correct implementation.</p>
+
+      <h2>THE REPO IS THE BACKEND</h2>
+      <p>Your training data belongs in a git repo you own:</p>
+      <ul>
+        <li><code>program/</code> — your workout templates, one JSON file each. Edit them in a PR if you like; the app pulls changes.</li>
+        <li><code>history/2026/…</code> — finished sessions, append-only. Every workout is a commit ("Log: Push Day — 18 sets, 42 min").</li>
+      </ul>
+      <p>Sync is a three-way merge with conflicts surfaced honestly (keep mine / take theirs / postpone). Sessions never merge — they only append. There is no PlusPlus server; GitHub is the transport and git is the audit log.</p>
+
+      <h2>THE CLI</h2>
+      <p><code>plusplus</code> is a Swift CLI that operates on a clone of your workouts repo — it never authenticates; git is the transport:</p>
+      <ul>
+        <li><code>plusplus init</code> — scaffold a workouts repo with the standard layout</li>
+        <li><code>plusplus lint</code> — validate every file against the schema</li>
+        <li><code>plusplus stats [--json]</code> — sessions, streaks, volume; machine-readable with <code>--json</code></li>
+        <li><code>plusplus import / export</code> — move bundles in and out</li>
+      </ul>
+
+      <h2>THE MCP SERVER</h2>
+      <p><code>plusplus mcp</code> exposes your workouts repo to agents over stdio JSON-RPC. Read tools return interchange documents and the <code>--json</code> reports verbatim. The one mutating tool, <code>propose_program_change</code>, is heavily fenced: <code>program/**</code> paths only, clean work tree required, must lint or it rolls back fully, commits to a fresh branch, and never pushes — review is yours.</p>
+
+      <h2>RECIPES</h2>
+      <p>Copy-paste GitHub Actions for your workouts repo: lint on every PR, a weekly training report opened as an issue. Your program gets CI like the rest of your code.</p>
+
+      <h2>WHERE THINGS ARE</h2>
+      <ul>
+        <li><a href="https://github.com/mrdavidjcole/plusplus">github.com/mrdavidjcole/plusplus</a> — the app, the Kit, the CLI, the format</li>
+        <li><code>docs/PLATFORM.md</code> in the repo — the full architecture</li>
+        <li><code>docs/AGENTS.md</code> — agent quickstart (files, <code>--json</code>, MCP)</li>
+      </ul>
+    </article>
+  </main>
+
+  <footer>
+    <span>++ · plusplus.fit</span>
+    <span><a href="https://github.com/mrdavidjcole/plusplus">source</a> · <a href="/">home</a></span>
+  </footer>
+</body>
+</html>
