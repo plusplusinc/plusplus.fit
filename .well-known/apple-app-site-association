@@ -2,7 +2,7 @@
   "applinks": {
     "details": [
       {
-        "appIDs": ["TEAMID.com.davidcole.plusplus"],
+        "appIDs": ["WK2XVYGZU9.com.davidcole.plusplus"],
         "components": [
           { "/": "/r", "comment": "Shared routine links open in the app when installed" },
           { "/": "/r/*" }
