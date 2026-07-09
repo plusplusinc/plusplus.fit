@@ -13,22 +13,20 @@ Hand-rolled static HTML/CSS in the app's quiet-terminal design language (v3 "ink
 - `.well-known/apple-app-site-association` — universal links (Team ID `WK2XVYGZU9`; served with the right content type via `vercel.json`)
 - `style.css` — the one stylesheet
 - `vercel.json` — clean URLs + AASA content-type header
-- `CNAME` — leftover from the retired GitHub Pages setup; harmless
 
 ## Hosting (Vercel)
 
-The site deploys on Vercel as a plain static project. One-time setup, done
-from the Vercel dashboard by the account owner:
+The site is LIVE on Vercel as a plain static project (framework preset
+**Other**, no build command, output directory: root), connected to this
+repo — every push to `main` deploys production; PRs get preview URLs
+automatically. The domains `plusplus.fit` + `www.plusplus.fit` are
+attached (apex 308s to www).
 
-1. **Add New → Project → Import `plusplusinc/plusplus.fit`** (framework preset: **Other**, no build command, output directory: root).
-2. **Settings → Domains → add `plusplus.fit`** (the domain already lives in this Vercel account, so it attaches without DNS changes).
-3. Every push to `main` deploys; PRs get preview URLs automatically.
+The AASA carries the real Team ID and the app ships the
+associated-domains entitlement since build 23, so universal links work
+as long as the deployed AASA is current.
 
-Until that import happens, nothing deploys — it also gates universal links
-(the AASA already carries the real Team ID and the app ships the
-associated-domains entitlement since build 23).
-
-The GitHub Pages workflow was retired in favor of Vercel.
+The GitHub Pages workflow (and its `CNAME`) was retired in favor of Vercel.
 
 ## License
 
