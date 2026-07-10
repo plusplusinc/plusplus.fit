@@ -1,17 +1,19 @@
-/* plusplus.fit — quiet-terminal, v3 "ink × increment green" palette.
-   Green is data, never chrome. */
+/* plusplus.fit — "Quiet Arcade" (2026-07 refresh of the v3 "ink ×
+   increment green" system): warm charcoal dark, raised-key buttons
+   that depress onto a fixed base plate. Green is data, never chrome;
+   blue is selected-state only (nothing on a static page selects, so
+   no blue here). Values mirror the app's Theme.swift. */
 
 :root {
-  --bg: #141414;
-  --surface: #1c1c1c;
-  --surface-raised: #242424;
-  --border: #292929;
-  --border-strong: #383838;
+  --bg: #201f1d;
+  --surface: #2a2925;
+  --surface-raised: #34322d;
+  --border: #3d3b35;
+  --border-strong: #4e4b43;
   --text: #f0ede6;
   --text-2: #9d9b96;
   --text-3: #5f5d59;
   --green: #46d17c;
-  --info: #62b6de;
   --notes: #cfa14a;
   --ink-fill: #f0ede6;
   --on-ink: #161616;
@@ -28,7 +30,6 @@
     --text-2: #6b6965;
     --text-3: #999691;
     --green: #17914b;
-    --info: #1a7fa8;
     --notes: #9a6700;
     --ink-fill: #232220;
     --on-ink: #ffffff;
@@ -94,6 +95,9 @@ nav a:hover { color: var(--text); }
 
 .cta-row { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; }
 
+/* Raised keys (Quiet Arcade): the cap sits 3px proud of a fixed base
+   plate (the box-shadow); pressing sinks the cap onto it — the plate's
+   bottom edge never moves. */
 .btn {
   display: inline-block;
   padding: 12px 22px;
@@ -101,9 +105,21 @@ nav a:hover { color: var(--text); }
   font-weight: 700;
   font-size: 15px;
   text-decoration: none;
+  margin-bottom: 3px;
+  transition: transform 0.06s ease-out, box-shadow 0.06s ease-out;
 }
-.btn.primary { background: var(--ink-fill); color: var(--on-ink); }
-.btn.ghost { border: 1px solid var(--border-strong); color: var(--text); }
+.btn:active { transform: translateY(3px); box-shadow: none !important; }
+.btn.primary {
+  background: var(--ink-fill);
+  color: var(--on-ink);
+  box-shadow: 0 3px 0 0 var(--border-strong);
+}
+.btn.ghost {
+  background: var(--bg);
+  border: 1px solid var(--border-strong);
+  color: var(--text);
+  box-shadow: 0 3px 0 0 var(--border);
+}
 
 .caption {
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
@@ -133,7 +149,8 @@ section h2 {
 .feature h3 { font-size: 16px; margin-bottom: 6px; }
 .feature p { font-size: 15px; color: var(--text-2); }
 .feature .up { color: var(--green); font-family: ui-monospace, Menlo, monospace; font-weight: 600; }
-.feature .new { color: var(--info); font-family: ui-monospace, Menlo, monospace; font-weight: 600; }
+/* "new" is data (the v4 call, kept by Quiet Arcade): green, not blue. */
+.feature .new { color: var(--green); font-family: ui-monospace, Menlo, monospace; font-weight: 600; }
 
 pre.term {
   background: var(--surface);
