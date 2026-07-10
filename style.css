@@ -95,7 +95,7 @@ nav a:hover { color: var(--text); }
 
 .cta-row { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; }
 
-/* Raised keys (Quiet Arcade): the cap sits 3px proud of a fixed base
+/* Raised keys (Quiet Arcade): the cap sits 4px proud of a fixed base
    plate (the box-shadow); pressing sinks the cap onto it — the plate's
    bottom edge never moves. */
 .btn {
@@ -105,20 +105,20 @@ nav a:hover { color: var(--text); }
   font-weight: 700;
   font-size: 15px;
   text-decoration: none;
-  margin-bottom: 3px;
+  margin-bottom: 4px;
   transition: transform 0.06s ease-out, box-shadow 0.06s ease-out;
 }
-.btn:active { transform: translateY(3px); box-shadow: none !important; }
+.btn:active { transform: translateY(4px); box-shadow: none !important; }
 .btn.primary {
   background: var(--ink-fill);
   color: var(--on-ink);
-  box-shadow: 0 3px 0 0 var(--border-strong);
+  box-shadow: 0 4px 0 0 var(--border-strong);
 }
 .btn.ghost {
   background: var(--bg);
   border: 1px solid var(--border-strong);
   color: var(--text);
-  box-shadow: 0 3px 0 0 var(--border);
+  box-shadow: 0 4px 0 0 var(--border);
 }
 
 .caption {
