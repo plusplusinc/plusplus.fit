@@ -5,7 +5,9 @@
         "appIDs": ["WK2XVYGZU9.com.davidcole.plusplus"],
         "components": [
           { "/": "/r", "comment": "Shared routine links open in the app when installed" },
-          { "/": "/r/*" }
+          { "/": "/r/*" },
+          { "/": "/github/connected", "comment": "GitHub App post-install return reopens the app to finish connecting" },
+          { "/": "/github/*" }
         ]
       }
     ]

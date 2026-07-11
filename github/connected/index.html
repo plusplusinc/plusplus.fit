@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Back to PlusPlus (++)</title>
+  <meta name="robots" content="noindex">
+  <link rel="stylesheet" href="/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='72' font-family='monospace' font-weight='bold' fill='%2346d17c'>+</text></svg>">
+  <style>
+    .return-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-top: 26px; }
+    .return-card h1 { font-size: 24px; margin: 0 0 8px; }
+    .return-card p { color: var(--text-2); font-size: 15px; margin: 0; }
+    .open-cta { margin-top: 22px; display: flex; flex-direction: column; gap: 10px; }
+    .steps { list-style: none; margin: 16px 0 0; padding: 0; }
+    .steps li { display: flex; gap: 10px; padding: 6px 0; color: var(--text-2); font-size: 14px; }
+    .steps .n { font-family: ui-monospace, "SF Mono", Menlo, monospace; color: var(--text-3); }
+    .steps .done .n { color: var(--green); }
+  </style>
+</head>
+<body>
+  <header class="site">
+    <a class="mark" href="/">++</a>
+    <nav>
+      <a href="/docs/">docs</a>
+      <a href="https://github.com/plusplusinc/plusplus">github</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="return-card">
+      <h1>PlusPlus Sync is installed</h1>
+      <p>Head back to the app to finish connecting your account. One more tap and your routines and history sync to the repo you just chose.</p>
+      <ul class="steps">
+        <li class="done"><span class="n">1</span><span>Installed PlusPlus Sync on your repo</span></li>
+        <li><span class="n">2</span><span>Reopen PlusPlus and authorize the connection</span></li>
+      </ul>
+    </div>
+    <div class="open-cta">
+      <a class="btn primary" id="open-app" href="plusplus://github/connected">Return to PlusPlus</a>
+      <a class="btn ghost" href="/">Don't have the app? Get PlusPlus</a>
+      <p class="caption">if the app didn't open on its own, tap Return to PlusPlus</p>
+    </div>
+  </main>
+
+  <footer>
+    <span>++ · plusplus.fit</span>
+    <span><a href="/privacy/">privacy</a> · <a href="/docs/">docs</a></span>
+  </footer>
+
+  <script>
+  (function () {
+    // GitHub sends the browser here after the App is installed (the App's
+    // post-install Setup URL). A universal link doesn't fire on GitHub's
+    // redirect — only on a tap — so this page reopens the app over the
+    // custom scheme and leaves the button as the manual fallback.
+    var target = 'plusplus://github/connected';
+    try { window.location.replace(target); } catch (e) { window.location.href = target; }
+  })();
+  </script>
+</body>
+</html>
