@@ -1,6 +1,9 @@
 {
   "cleanUrls": true,
   "trailingSlash": true,
+  "rewrites": [
+    { "source": "/start/(.*)", "destination": "/start/index.html" }
+  ],
   "headers": [
     {
       "source": "/.well-known/apple-app-site-association",
