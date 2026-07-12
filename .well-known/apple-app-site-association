@@ -6,6 +6,7 @@
         "components": [
           { "/": "/r", "comment": "Shared routine links open in the app when installed" },
           { "/": "/r/*" },
+          { "/": "/start/*", "comment": "Calendar event start links open the app and start that routine" },
           { "/": "/github/connected", "comment": "GitHub App post-install return reopens the app to finish connecting" },
           { "/": "/github/*" }
         ]
