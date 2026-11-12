@@ -27,20 +27,20 @@ python3 -m http.server 8788 --directory public
 ## Hosting
 
 The site is a Cloudflare Worker, `plusplus-fit`, with no script: it serves `public/` as static
-assets. `plusplus.fit` and `www.plusplus.fit` are both attached to it as custom domains, and the
-domain's DNS is a Cloudflare zone.
+assets. The domain's DNS is a Cloudflare zone.
 
-The domain is registered through Vercel, which renews it; its nameservers there are set to
-Cloudflare's.
+- `plusplus.fit` is the address. `www.plusplus.fit` redirects to it (a redirect rule on the zone),
+  and plain `http://` redirects to `https://` (the zone's Always Use HTTPS setting).
+- A push to `main` deploys: the Worker is connected to this repo under Workers Builds, with no
+  build command and `npx wrangler deploy` as the deploy command. Pull requests get a preview build.
+- The domain is registered through Vercel, which renews it; its nameservers there are set to
+  Cloudflare's.
 
-Deploy by hand:
+To deploy by hand:
 
 ```sh
 npx wrangler deploy
 ```
-
-A push to `main` does not deploy. To change that, connect this repo to the Worker under Workers
-Builds in the Cloudflare dashboard.
 
 ## License
 
