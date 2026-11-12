@@ -2,6 +2,11 @@
   // Static site on Cloudflare Workers: no Worker script, only the assets in public/.
   "name": "plusplus-fit",
   "compatibility_date": "2026-11-01",
+  // The apex and www are both attached to the Worker; Cloudflare makes their DNS records.
+  "routes": [
+    { "pattern": "plusplus.fit", "custom_domain": true },
+    { "pattern": "www.plusplus.fit", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./public",
     "html_handling": "auto-trailing-slash"

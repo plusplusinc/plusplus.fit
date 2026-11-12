@@ -14,8 +14,7 @@ app is). No build step, no dependencies.
 - `public/privacy/index.html`: the same document, opened on `Privacy.md`
 - `public/style.css`: the one stylesheet
 - `public/editor.js`: switches tabs in place and moves the caret; without it each tab is a link
-- `wrangler.jsonc`: Cloudflare Workers static-assets config, serving `public/`
-- `vercel.json`: serves `public/` on Vercel; delete it once the domain is on Cloudflare
+- `wrangler.jsonc`: Cloudflare Workers static-assets config, serving `public/` on both hostnames
 
 Both pages carry both files, so a change to either file's text goes in both HTML files.
 
@@ -27,16 +26,21 @@ python3 -m http.server 8788 --directory public
 
 ## Hosting
 
-Today the site is on Vercel, connected to this repo: a push to `main` deploys production, and
-the domain's nameservers are Vercel's (registrar: Name.com).
+The site is a Cloudflare Worker, `plusplus-fit`, with no script: it serves `public/` as static
+assets. `plusplus.fit` and `www.plusplus.fit` are both attached to it as custom domains, and the
+domain's DNS is a Cloudflare zone.
 
-Decided: the site will move to Cloudflare Workers. To cut over:
+The domain is registered through Vercel, which renews it; its nameservers there are set to
+Cloudflare's.
 
-1. `npx wrangler deploy` creates the `plusplus-fit` Worker on a `workers.dev` URL.
-2. Add `plusplus.fit` as a zone in Cloudflare and point the nameservers at it from Name.com.
-3. Attach `plusplus.fit` and `www.plusplus.fit` to the Worker as custom domains, and connect
-   the repo under Workers Builds so a push to `main` deploys.
-4. Remove the Vercel project and `vercel.json`.
+Deploy by hand:
+
+```sh
+npx wrangler deploy
+```
+
+A push to `main` does not deploy. To change that, connect this repo to the Worker under Workers
+Builds in the Cloudflare dashboard.
 
 ## License
 
