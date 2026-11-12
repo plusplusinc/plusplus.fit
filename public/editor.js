@@ -13,8 +13,11 @@
     f.url = t.href;
     f.pane = document.getElementById('pane-' + t.dataset.tab);
     f.rows = [].slice.call(f.pane.children);
-    f.caret = f.pane.appendChild(document.createElement('span'));
+    // The caret sits beside the list, in main, since a list may hold only its items.
+    f.caret = f.pane.parentNode.appendChild(document.createElement('span'));
     f.caret.className = 'caret';
+    f.caret.setAttribute('aria-hidden', 'true');
+    f.caret.hidden = f.pane.hidden;
     if (t.classList.contains('on')) current = t.dataset.tab;
   });
 
@@ -38,9 +41,10 @@
     f.col = Math.max(0, Math.min(f.col, text(row).length));
     f.rows.forEach(function (r, i) { r.classList.toggle('cur', i === f.line); });
     var range = rangeAt(row, f.col), box = range.getClientRects()[0] || range.getBoundingClientRect();
-    var pane = f.pane.getBoundingClientRect();
+    var pane = f.pane.parentNode.getBoundingClientRect();
     if (!box || !box.height) { box = row.querySelector('.line').getBoundingClientRect(); }
-    f.caret.style.transform = 'translate(' + (box.left - pane.left) + 'px,' + (box.top - pane.top) + 'px)';
+    var held = f.pane.parentNode;
+    f.caret.style.transform = 'translate(' + (box.left - pane.left + held.scrollLeft) + 'px,' + (box.top - pane.top + held.scrollTop) + 'px)';
     f.caret.style.height = f.caret.style.lineHeight = box.height + 'px';
     // Start the blink over, so the caret shows the moment it lands.
     f.caret.style.animation = 'none'; void f.caret.offsetWidth; f.caret.style.animation = '';
@@ -55,7 +59,7 @@
       t.classList.toggle('on', on);
       if (on) t.setAttribute('aria-current', 'page'); else t.removeAttribute('aria-current');
     });
-    Object.keys(files).forEach(function (k) { files[k].pane.hidden = k !== id; });
+    Object.keys(files).forEach(function (k) { files[k].pane.hidden = files[k].caret.hidden = k !== id; });
     document.getElementById('crumb').textContent = f.name;
     document.getElementById('lang').textContent = f.lang;
     document.title = f.title;
@@ -103,6 +107,8 @@
 
   addEventListener('keydown', function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
+    // Leave the keys alone where they already mean something.
+    if (e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;
     var f = files[current], move = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] }[e.key];
     if (!move) return;
     e.preventDefault();

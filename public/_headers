@@ -1,0 +1,5 @@
+# Sent with every response. HSTS: browsers use HTTPS for this host for the next
+# six months. Subdomains are not included and the domain is not preloaded.
+/*
+  Strict-Transport-Security: max-age=15552000
+  X-Content-Type-Options: nosniff
