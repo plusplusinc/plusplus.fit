@@ -1,0 +1,9 @@
+{
+  // Static site on Cloudflare Workers: no Worker script, only the assets in public/.
+  "name": "plusplus-fit",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./public",
+    "html_handling": "auto-trailing-slash"
+  }
+}

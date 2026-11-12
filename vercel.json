@@ -1,13 +1,5 @@
 {
+  "outputDirectory": "public",
   "cleanUrls": true,
-  "trailingSlash": true,
-  "rewrites": [
-    { "source": "/start/(.*)", "destination": "/start/index.html" }
-  ],
-  "headers": [
-    {
-      "source": "/.well-known/apple-app-site-association",
-      "headers": [{ "key": "Content-Type", "value": "application/json" }]
-    }
-  ]
+  "trailingSlash": true
 }
